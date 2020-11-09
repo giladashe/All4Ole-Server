@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using All4Ole_Server.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
+using System.ComponentModel.DataAnnotations;
 
 namespace All4Ole_Server.Controllers
 {
@@ -11,41 +14,75 @@ namespace All4Ole_Server.Controllers
     [Route("[controller]")]
     public class UserController : Controller
     {
+        //private readonly IFlightsManager manager;
+        private Manager manager = new Manager();
         // GET: UserController
         [HttpGet]
         public ActionResult Index()
         {
-            return Ok("Just seeing if it works");
+            return Ok("Welcome to my server!!!!!!!!");
         }
 
-     /*   // GET: UserController/Details/5
-        public ActionResult Details(int id)
+        // register new user
+        [HttpPost]
+        [Route("/user/register")]
+        public ActionResult Register([FromBody] User user)
         {
-            return View();
+            string message = manager.InsertUser(user);
+            if (message == "good")
+                return Ok(user);
+            return BadRequest(message);
         }
 
-        // GET: UserController/Create
-        public ActionResult Create()
+        // Login to user's account - todoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+        [HttpPost]
+        [Route("/user/login")]
+        public ActionResult Login([FromBody] User user)
         {
-            return View();
-        }*/
+            /*string message = manager.InsertUser(user);
+            if (message == "good")
+                return Ok("Inserted successfully");*/
+            return BadRequest("");
+        }
 
         // POST: UserController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Login()
+        [HttpGet]
+        [Route("/user/Help")]
+        public ActionResult LookForHelp([FromQuery(Name = "username")] string userName, [FromQuery(Name = "help")] int help)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            /*Manager manager = new Manager();
+            string message = manager.InsertUser(user);
+            if (message == "good")
+                return Ok("Inserted successfully");*/
+            //manager.LookForHelp(userName, help);
+            return Ok(manager.LookForHelp(userName, help));
         }
 
-        // GET: UserController/Edit/5
+
+        //todo extract username and help from json!!!!!!!!!!!!!!!!!!!!!!!! and do function
+        [HttpPost]
+        [Route("/user/setHelp")]
+        public ActionResult SetHelp([FromBody] User user)
+        {
+            /*string message = manager.InsertUser(user);
+            if (message == "good")
+                return Ok("Inserted successfully");*/
+            return BadRequest("");
+        }
+
+
+        //todo extract username and help from json!!!!!!!!!!!!!!!!!!!!!!!! and do function
+        [HttpPost]
+        [Route("/user/people")]
+        public ActionResult PeopleLikeMe([FromQuery(Name = "username")] string userName)
+        {
+            /*string message = manager.InsertUser(user);
+            if (message == "good")
+                return Ok("Inserted successfully");*/
+            return BadRequest("");
+        }
+
+        /*// GET: UserController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
@@ -85,6 +122,6 @@ namespace All4Ole_Server.Controllers
             {
                 return View();
             }
-        }
+        }*/
     }
 }
