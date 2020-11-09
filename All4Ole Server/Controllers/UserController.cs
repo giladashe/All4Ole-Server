@@ -45,7 +45,19 @@ namespace All4Ole_Server.Controllers
             return BadRequest("");
         }
 
-        // POST: UserController/Create
+
+        //todo extract username and help from json!!!!!!!!!!!!!!!!!!!!!!!! and do function
+        [HttpPost]
+        [Route("/user/setHelp")]
+        public ActionResult SetHelp([FromBody] User user)
+        {
+            /*string message = manager.InsertUser(user);
+            if (message == "good")
+                return Ok("Inserted successfully");*/
+            return BadRequest("");
+        }
+
+        //todo function!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         [HttpGet]
         [Route("/user/Help")]
         public ActionResult LookForHelp([FromQuery(Name = "username")] string userName, [FromQuery(Name = "help")] int help)
@@ -59,10 +71,10 @@ namespace All4Ole_Server.Controllers
         }
 
 
-        //todo extract username and help from json!!!!!!!!!!!!!!!!!!!!!!!! and do function
-        [HttpPost]
-        [Route("/user/setHelp")]
-        public ActionResult SetHelp([FromBody] User user)
+        //todo function!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        [HttpGet]
+        [Route("/user/people")]
+        public ActionResult FindFriendsForHobbies([FromQuery(Name = "username")] string userName, [FromQuery(Name = "hobbies")] int hobbies)
         {
             /*string message = manager.InsertUser(user);
             if (message == "good")
@@ -71,8 +83,8 @@ namespace All4Ole_Server.Controllers
         }
 
 
-        //todo extract username and help from json!!!!!!!!!!!!!!!!!!!!!!!! and do function
-        [HttpPost]
+        //todo function!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        [HttpGet]
         [Route("/user/people")]
         public ActionResult PeopleLikeMe([FromQuery(Name = "username")] string userName)
         {
@@ -82,46 +94,5 @@ namespace All4Ole_Server.Controllers
             return BadRequest("");
         }
 
-        /*// GET: UserController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: UserController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: UserController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: UserController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }*/
     }
 }
