@@ -10,22 +10,16 @@ namespace All4Ole_Server.Model
         // Gets flight plan from DB by id.
         User GetUser(string key);
 
+        string Login(string userName, string password);
+
         // Inserts new Flight plan to DB.
         string InsertUser(User user);
 
-       /* // Deletes flight (plan) from DB.
-        string DeleteFlight(string id);
+        string SetHelp(string userName, int help);
 
-        // Get all flights from DB.
-        Task<IEnumerable<Flight>> GetAllFlights(string dateTime, bool isExternal);
+        List<User> PeopleLikeMe(string userName);
 
-        // Get all Server urls from DB.
-        IEnumerable<Server> GetAllServers();
+        List<User> FindFriendsForHobbies(string userName, int hobbies);
 
-        // Insert new Server to DB.
-        string InsertServer(Server server);
-
-        // Deletes Server from DB by id.
-        string DeleteServer(string id);*/
     }
 }
