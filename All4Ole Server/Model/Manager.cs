@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MySql.Data;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace All4Ole_Server.Model
 {
@@ -43,7 +39,7 @@ namespace All4Ole_Server.Model
         }
 
         //makes user from mysql reader
-        public User MakeUserFromMySqlObject(MySqlDataReader reader)
+        private User MakeUserFromMySqlObject(MySqlDataReader reader)
         {
             User user = new User()
             {

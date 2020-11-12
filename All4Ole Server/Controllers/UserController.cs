@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using All4Ole_Server.Model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json.Linq;
-using System.Drawing.Printing;
-using Renci.SshNet.Messages;
 
 namespace All4Ole_Server.Controllers
 {
@@ -18,7 +11,14 @@ namespace All4Ole_Server.Controllers
     public class UserController : Controller
     {
         //private readonly IFlightsManager manager;
-        private Manager manager = new Manager();
+        private IManager manager;
+
+        public UserController(IManager manager)
+        {
+            this.manager = manager;
+        }
+
+
         // GET: UserController
         [HttpGet]
         public ActionResult Index()

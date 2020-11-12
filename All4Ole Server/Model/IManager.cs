@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace All4Ole_Server.Model
 {
     public interface IManager
     {
-        // Gets flight plan from DB by id.
-        User GetUser(string key);
-
+        
         string Login(string userName, string password);
 
         // Inserts new Flight plan to DB.
@@ -20,6 +15,8 @@ namespace All4Ole_Server.Model
         List<User> PeopleLikeMe(string userName);
 
         List<User> FindFriendsForHobbies(string userName, int hobbies);
+
+        List<User> LookForHelp(string userName, int help);
 
     }
 }
