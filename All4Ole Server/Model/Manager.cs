@@ -13,7 +13,6 @@ namespace All4Ole_Server.Model
             MySqlConnection conn = new MySqlConnection(connStr);
             try
             {
-                Console.WriteLine("Connecting to MySQL...");
                 conn.Open();
 
                 string sql = $"SELECT * FROM users WHERE user_name='{userName}'";
@@ -25,17 +24,18 @@ namespace All4Ole_Server.Model
                 {
                     user = MakeUserFromMySqlObject(rdr);
                 }
-                conn.Close();
                 rdr.Close();
                 return user;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.ToString());
+                return null;
             }
-
-            Console.WriteLine("Done.");
-            return null;
+            finally
+            {
+                if (conn != null)
+                    conn.Close();
+            }
         }
 
         //makes user from mysql reader
@@ -64,28 +64,8 @@ namespace All4Ole_Server.Model
         public List<User> LookForHelp(string userName, int help)
         {
             User user = GetUser(userName);
-            MySqlConnection conn = new MySqlConnection(connStr);
-            List<User> users = new List<User>();
-            try
-            {
-                Console.WriteLine("Connecting to MySQL...");
-                conn.Open();
-
-                string sql = $"SELECT * FROM users WHERE user_name!='{userName}' AND language='{user.Language}' AND residential_area='{user.ResidentialArea}' AND help&{help}>0";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
-                {
-                    users.Add(MakeUserFromMySqlObject(rdr));
-                }
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-
-            Console.WriteLine("Done.");
-            return users;
+            string query = $"SELECT * FROM users WHERE user_name!='{userName}' AND language='{user.Language}' AND residential_area='{user.ResidentialArea}' AND help&{help}>0";
+            return TakeUsers(query);
         }
 
 
@@ -103,42 +83,29 @@ namespace All4Ole_Server.Model
         public List<User> FindFriendsForHobbies(string userName, int hobbies)
         {
             User user = GetUser(userName);
-            MySqlConnection conn = new MySqlConnection(connStr);
-            List<User> users = new List<User>();
-            try
-            {
-                Console.WriteLine("Connecting to MySQL...");
-                conn.Open();
-
-                string sql = $"SELECT * FROM users WHERE user_name!='{userName}' AND language='{user.Language}' AND residential_area='{user.ResidentialArea}' AND hobbies &{hobbies}>0";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
-                {
-                    users.Add(MakeUserFromMySqlObject(rdr));
-                }
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-            return users;
+            string query = $"SELECT * FROM users WHERE user_name!='{userName}' AND language='{user.Language}' AND residential_area='{user.ResidentialArea}' AND hobbies &{hobbies}>0";
+            return TakeUsers(query);
         }
 
         public List<User> PeopleLikeMe(string userName)
         {
             User user = GetUser(userName);
+            // if he has 1 hobby than people needs only 1 hobby similar to him, else they need 2 and above
             string forHobbies = IsPowerOf2(user.Hobbies) ? ">0" : ">1";
+            string query = $"SELECT * FROM users WHERE user_name!='{userName}' AND language='{user.Language}' AND residential_area='{user.ResidentialArea}' And origin_country='{user.PreviousCountry}' AND hobbies&{user.Hobbies}" + forHobbies +
+                   $" AND marital_status='{user.MaritalStatus}' AND has_little_children='{user.HasChildrenUnder18}'";
+            return TakeUsers(query);
+        }
+
+
+        private List<User> TakeUsers(string query)
+        {
             MySqlConnection conn = new MySqlConnection(connStr);
             List<User> users = new List<User>();
             try
             {
-                Console.WriteLine("Connecting to MySQL...");
                 conn.Open();
-
-                string sql = $"SELECT * FROM users WHERE user_name!='{userName}' AND language='{user.Language}' AND residential_area='{user.ResidentialArea}' And origin_country='{user.PreviousCountry}' AND hobbies&{user.Hobbies}" + forHobbies +
-                    $" AND marital_status='{user.MaritalStatus}' AND has_little_children='{user.HasChildrenUnder18}'";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                MySqlCommand cmd = new MySqlCommand(query, conn);
                 MySqlDataReader rdr = cmd.ExecuteReader();
                 while (rdr.Read())
                 {
@@ -152,6 +119,7 @@ namespace All4Ole_Server.Model
             return users;
         }
 
+        // checks if a number has only 1 bit turned on
         private bool IsPowerOf2(int number)
         {
             return (number & (number - 1)) == 0;
@@ -163,24 +131,27 @@ namespace All4Ole_Server.Model
             MySqlConnection conn = new MySqlConnection(connStr);
             try
             {
-                Console.WriteLine("Connecting to MySQL...");
                 conn.Open();
-
-
-                string sql = $"UPDATE users SET help='{help}' WHERE user_name='{userName}'";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                string query = $"UPDATE users SET help='{help}' WHERE user_name='{userName}'";
+                MySqlCommand cmd = new MySqlCommand(query, conn);
                 MySqlDataReader rdr = cmd.ExecuteReader();
                 while (rdr.Read())
                 {
                 }
+                if (rdr != null)
+                    rdr.Close();
+                return "success";
             }
             catch (Exception ex)
             {
                 return ex.Message;
             }
+            finally
+            {
+                if (conn != null)
+                    conn.Close();
+            }
 
-            Console.WriteLine("Done.");
-            return "success";
         }
 
         // Insert user to mysql
@@ -189,7 +160,6 @@ namespace All4Ole_Server.Model
             MySqlConnection conn = new MySqlConnection(connStr);
             try
             {
-                Console.WriteLine("Connecting to MySQL...");
                 conn.Open();
 
                 string query = "INSERT INTO all4oledb.users(user_name, password, first_name, last_name, phone,  email, origin_country, residential_area, language, marital_status, has_little_children, hobbies, help) VALUES (?user_name,?password,?first_name,?last_name,?phone,?email,?origin_country,?residential_area,?language,?marital_status,?has_little_children,?hobbies,?help);";
@@ -198,16 +168,17 @@ namespace All4Ole_Server.Model
 
                 AddParametersToQuery(cmd, user);
                 cmd.ExecuteNonQuery();
-
-
+                return "Good";
             }
             catch (Exception ex)
             {
                 return ex.ToString();
             }
-
-            conn.Close();
-            return "Good";
+            finally
+            {
+                if (conn != null)
+                    conn.Close();
+            }
 
         }
 

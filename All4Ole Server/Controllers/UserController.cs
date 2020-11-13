@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using All4Ole_Server.Model;
 using Microsoft.AspNetCore.Mvc;
-
 using Newtonsoft.Json.Linq;
 
 namespace All4Ole_Server.Controllers
@@ -10,8 +9,7 @@ namespace All4Ole_Server.Controllers
     [Route("[controller]")]
     public class UserController : Controller
     {
-        //private readonly IFlightsManager manager;
-        private IManager manager;
+        private readonly IManager manager;
 
         public UserController(IManager manager)
         {
@@ -26,9 +24,7 @@ namespace All4Ole_Server.Controllers
             return Ok("Welcome to my server!!!!!!!!");
         }
 
-        // register new user
-      //  [HttpPost]
-      //  [Route("/user/register")]
+        // Registers new user
         [HttpPost("[action]")]
         public ActionResult Register([FromBody] User user)
         {
@@ -39,9 +35,7 @@ namespace All4Ole_Server.Controllers
         }
 
         // Login to user's account
-        //[HttpPost]
         [HttpPost("[action]")]
-        //[Route("/user/login")]
         public ActionResult Login([FromBody] JObject loginUser)
         {
             string userName = loginUser.Value<string>("user_name");
@@ -54,9 +48,8 @@ namespace All4Ole_Server.Controllers
         }
 
 
-        //todo extract username and help from json!!!!!!!!!!!!!!!!!!!!!!!! and do function
+        // Changes the things the user can help with
         [HttpGet("[action]")]
-       // [Route("/user/setHelp")]
         public ActionResult SetHelp([FromQuery(Name = "username")] string userName, [FromQuery(Name = "help")] int help)
         {
             string message = manager.SetHelp(userName, help);
@@ -79,7 +72,7 @@ namespace All4Ole_Server.Controllers
         }
 
 
-        // Find people that have hobbies like the user
+        // Finds people that have hobbies like the user
         [HttpGet]
         [Route("/user/hobby")]
         public ActionResult FindFriendsForHobbies([FromQuery(Name = "username")] string userName, [FromQuery(Name = "hobbies")] int hobbies)
@@ -94,7 +87,7 @@ namespace All4Ole_Server.Controllers
         }
 
 
-        //todo function!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // Searches for people who are similar to the user
         [HttpGet]
         [Route("/user/people")]
         public ActionResult PeopleLikeMe([FromQuery(Name = "username")] string userName)
