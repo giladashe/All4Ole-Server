@@ -4,8 +4,8 @@ namespace All4Ole_Server.Model
 {
     public interface IManager
     {
-        
-        string Login(string userName, string password);
+
+        User Login(string userName, string password);
 
         // Inserts new Flight plan to DB.
         string InsertUser(User user);

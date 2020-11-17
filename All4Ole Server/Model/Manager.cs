@@ -69,14 +69,14 @@ namespace All4Ole_Server.Model
         }
 
 
-        public string Login(string userName, string password)
+        public User Login(string userName, string password)
         {
             User user = GetUser(userName);
             if (user == null || password != user.Password)
             {
-                return "can't login";
+                return null;
             }
-            return "can login";
+            return user;
         }
 
 

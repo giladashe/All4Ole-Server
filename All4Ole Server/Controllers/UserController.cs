@@ -40,11 +40,11 @@ namespace All4Ole_Server.Controllers
         {
             string userName = loginUser.Value<string>("user_name");
             string password = loginUser.Value<string>("password");
-            string message = manager.Login(userName, password);
+            User user = manager.Login(userName, password);
             
-            if (message == "can login")
-                return Ok(message);
-            return BadRequest(message);
+            if (user != null )
+                return Ok(user);
+            return BadRequest(null);
         }
 
 
