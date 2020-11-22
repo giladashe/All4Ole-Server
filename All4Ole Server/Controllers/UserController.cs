@@ -21,7 +21,7 @@ namespace All4Ole_Server.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            return Ok("Welcome to my server!!!!!!!!");
+            return Ok("Welcome to all4ole db");
         }
 
         // Registers a new user to the MySQL db
