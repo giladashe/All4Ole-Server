@@ -6,9 +6,33 @@ using System.ComponentModel.DataAnnotations;
 
 namespace All4Ole_Server.Model
 {
+
+	// User for the db - can be converted to/from jsons
     public class User
     {
-		[Key]
+        public User()
+        {
+
+        }
+        public User(string userName, string password, string firstName, string lastName, string phone, int hobbies, int help,
+			string email, string previousCountry, string language, string residentialArea, int maritalStatus, int hasChildrenUnder18)
+        {
+            UserName = userName;
+            Password = password;
+            FirstName = firstName;
+            LastName = lastName;
+            Phone = phone;
+            Hobbies = hobbies;
+            Help = help;
+            Email = email;
+            PreviousCountry = previousCountry;
+            Language = language;
+            ResidentialArea = residentialArea;
+            MaritalStatus = maritalStatus;
+            HasChildrenUnder18 = hasChildrenUnder18;
+        }
+
+        [Key]
 		[JsonProperty("user_name")]
 		public string UserName { get; set; }
 		[JsonProperty("password")]

@@ -24,12 +24,12 @@ namespace All4Ole_Server.Controllers
             return Ok("Welcome to my server!!!!!!!!");
         }
 
-        // Registers new user
+        // Registers a new user to the MySQL db
         [HttpPost("[action]")]
         public ActionResult Register([FromBody] User user)
         {
             string message = manager.InsertUser(user);
-            if (message == "good")
+            if (message == "Good")
                 return Ok(user);
             return BadRequest(message);
         }
@@ -41,10 +41,11 @@ namespace All4Ole_Server.Controllers
             string userName = loginUser.Value<string>("user_name");
             string password = loginUser.Value<string>("password");
             User user = manager.Login(userName, password);
-            
-            if (user != null )
+
+            if (user != null)
                 return Ok(user);
             return BadRequest(null);
+
         }
 
 
@@ -64,7 +65,7 @@ namespace All4Ole_Server.Controllers
         public ActionResult LookForHelp([FromQuery(Name = "username")] string userName, [FromQuery(Name = "help")] int help)
         {
             List<User> users = manager.LookForHelp(userName, help);
-            if(users == null)
+            if (users == null)
             {
                 return BadRequest("Connection failure");
             }

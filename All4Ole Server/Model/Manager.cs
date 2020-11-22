@@ -6,7 +6,10 @@ namespace All4Ole_Server.Model
 {
     public class Manager : IManager
     {
-        private readonly string connStr = "server=localhost;user=root;database=all4oledb;port=3306;password=Mcgilad1l@";
+        // the connection string for the mysql server in AWS
+        private readonly string connStr = "server=all4oleserverdb.ck3ec6yeqlpt.us-east-2.rds.amazonaws.com; user=admin;database=all4oledb;port=3306;password=Acgilad1s";
+
+        // Gets user from the db
         private User GetUser(string userName)
         {
 
@@ -38,7 +41,7 @@ namespace All4Ole_Server.Model
             }
         }
 
-        //makes user from mysql reader
+        // Makes user from mysql reader
         private User MakeUserFromMySqlObject(MySqlDataReader reader)
         {
             User user = new User()
@@ -60,7 +63,7 @@ namespace All4Ole_Server.Model
             return user;
         }
 
-
+        // Looks for people who are close to the user speaks his language and who can help him
         public List<User> LookForHelp(string userName, int help)
         {
             User user = GetUser(userName);
@@ -68,7 +71,7 @@ namespace All4Ole_Server.Model
             return TakeUsers(query);
         }
 
-
+        // Tries to login to the user's account - if it's not in the db or password is wrong returns null, else returns the user
         public User Login(string userName, string password)
         {
             User user = GetUser(userName);
@@ -79,7 +82,7 @@ namespace All4Ole_Server.Model
             return user;
         }
 
-
+        // Finds users for hobbies (at least one) - that lives near the user and speaks his language
         public List<User> FindFriendsForHobbies(string userName, int hobbies)
         {
             User user = GetUser(userName);
@@ -87,6 +90,7 @@ namespace All4Ole_Server.Model
             return TakeUsers(query);
         }
 
+        // Finds similar users to the user- that live near the user, speak his language, have similar merital status, 
         public List<User> PeopleLikeMe(string userName)
         {
             User user = GetUser(userName);
@@ -97,7 +101,7 @@ namespace All4Ole_Server.Model
             return TakeUsers(query);
         }
 
-
+        // Gets Users from mysql db
         private List<User> TakeUsers(string query)
         {
             MySqlConnection conn = new MySqlConnection(connStr);
@@ -119,13 +123,13 @@ namespace All4Ole_Server.Model
             return users;
         }
 
-        // checks if a number has only 1 bit turned on
+        // Checks if a number has only 1 bit turned on
         private bool IsPowerOf2(int number)
         {
             return (number & (number - 1)) == 0;
         }
 
-
+        // Sets the help for the user (bitwise - every bit is another help topic)
         public string SetHelp(string userName, int help)
         {
             MySqlConnection conn = new MySqlConnection(connStr);
@@ -154,7 +158,7 @@ namespace All4Ole_Server.Model
 
         }
 
-        // Insert user to mysql
+        // Inserts user to mysql
         public string InsertUser(User user)
         {
             MySqlConnection conn = new MySqlConnection(connStr);
@@ -182,7 +186,7 @@ namespace All4Ole_Server.Model
 
         }
 
-        //add the parameters of user to the mysql command
+        // Adds the parameters of user to the mysql command
         public void AddParametersToQuery(MySqlCommand cmd, User user)
         {
             cmd.Parameters.Add("?user_name", MySqlDbType.VarChar).Value = user.UserName;

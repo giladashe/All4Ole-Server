@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>All4Ole_Server</RootNamespace>
+    <UserSecretsId>98b19442-d488-4574-a4b7-fc8467fa41ec</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
